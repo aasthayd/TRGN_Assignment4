@@ -8,7 +8,7 @@ gene_data = 'Homo_sapiens.GRCh37.75.gtf'
 # print('here')
 
 argv = sys.argv
-# print(len(argv))
+print(len(argv))
 if len(sys.argv) > 3:
     print('>3')
     index_to_replace_gene_id = int(argv[1].split('-f')[-1])
