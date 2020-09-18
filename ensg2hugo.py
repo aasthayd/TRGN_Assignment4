@@ -5,20 +5,22 @@ import re
 
 
 gene_data = 'Homo_sapiens.GRCh37.75.gtf'
-print('here')
+# print('here')
 
+argv = sys.argv
+# print(len(argv))
 if len(sys.argv) > 3:
     print('>3')
-    index_to_replace_gene_id = int(sys.argv[1].split('-f')[-1])
-    input_file_path = sys.argv[2]
-    results_file_path = sys.argv[3].replace('>','')
+    index_to_replace_gene_id = int(argv[1].split('-f')[-1])
+    input_file_path = argv[2]
+    results_file_path = argv[3].replace('>', '')
 
 else:
     print('3')
     index_to_replace_gene_id = 0
-    input_file_path = sys.argv[1]
-    results_file_path = sys.argv[2].replace('>','')
-
+    input_file_path = argv[1]
+    results_file_path = argv[2].replace('>', '')
+    
 ensembl_dict={}
 for each_line_of_text in fileinput.FileInput(gene_data):
     if each_line_of_text.startswith('#'):
@@ -28,17 +30,13 @@ for each_line_of_text in fileinput.FileInput(gene_data):
     hugo_name = re.findall(r'gene_name "(.*?)"', each_line_of_text, re.I) 
 
     if gene:
-        ensembl_dict[ensg_ID[0]] = hugo_name[0] 
-hugo_name_list = []
+        ensembl_dict[ensg_ID[0]] = hugo_name[0]
 
-count_found = 0
-count_unknown = 0
+hugo_name_list = []
 with open(input_file_path) as csv_file:
     csv_reader = csv.reader(csv_file)
     for row in csv_reader:
-        print(row)
         ensg_ID = row[1].split('.')[0]
-        print(ensg_ID)
         hugo = ensembl_dict.get(ensg_ID, 'UNKNOWN')
         row[1] = hugo
         hugo_name_list.append(row)
